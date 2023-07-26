@@ -13,4 +13,24 @@ router.get('/users', async (req, res) => {
     }
 })
 
+router.post('/updateuser',
+    async (req, res) => {
+
+        console.log(req.body)
+
+        try {
+            const user = await User.findOneAndUpdate({ _id: req.body._id }, {
+                _id: req.body._id,
+                name: req.body.name,
+                phone_no: req.body.phone_no,
+                email: req.body.email
+            });
+            res.json({ success: true, user });
+        }
+        catch (err) {
+            res.json({ success: false});
+        }
+    })
+
+
 module.exports = router;
