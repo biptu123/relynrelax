@@ -13,6 +13,18 @@ router.get('/users', async (req, res) => {
     }
 })
 
+router.get('/user', async (req, res) => {
+    try {
+        const _id = req.query._id;
+        
+        const user = await User.findOne({_id: _id});
+        res.json({ success: true, user: user });
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(400).json({ success: false, message: 'Internal server error' });
+    }
+})
+
 router.post('/updateuser',
     async (req, res) => {
 
