@@ -45,24 +45,44 @@ const SellRequestSchema = new Schema({
         required: true
     },
     owner_image: {
-        type: String,
-        required: true
+        public_id: {
+            type: String,
+            required: true
+        },
+        url: {
+            type: String,
+            required: true
+        }
     },
     adhar_image: {
-        type: String,
-        required: true
+        public_id: {
+            type: String,
+            required: true
+        },
+        url: {
+            type: String,
+            required: true
+        }
     },
     rc_image: {
-        type: String,
-        required: true
-    },
-    back_image: {
-        type: String,
-        required: true
+        public_id: {
+            type: String,
+            required: true
+        },
+        url: {
+            type: String,
+            required: true
+        }
     },
     side_image: {
-        type: String,
-        required: true
+        public_id: {
+            type: String,
+            required: true
+        },
+        url: {
+            type: String,
+            required: true
+        }
     },
     status: {
         type: String,

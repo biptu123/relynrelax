@@ -1,70 +1,81 @@
 const express = require('express');
-const multer = require('multer');
+const cloudinary = require('../utils/cloudinary');
 const SellRequest = require('../models/SellRequest');
-const path = require('path');
-
-const app = express();
 const router = express.Router();
 
-// Set up Multer storage configuration
-const storage = multer.diskStorage({
-    destination: path.join(__dirname, '../uploads'),
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-    },
-});
-
-const upload = multer({ storage: storage });
 
 // Upload endpoint using Express Router
-router.post('/upload',
-    upload.fields([
-        { name: 'owner_image' },
-        { name: 'adhar_image' },
-        { name: 'rc_image' },
-        { name: 'back_image' },
-        { name: 'side_image' }
-    ]),
-    async (req, res) => {
-        
-    const sellrequest = {
-        user: req.body.user,
-        reg_no: req.body.reg_no,
-        phone_no: req.body.phone_no,
-        price: req.body.price,
-        brand: req.body.brand,
-        type: req.body.type,
-        specification: req.body.specification,
-        km_ran: req.body.km_ran,
-        age: req.body.age,
-        purchased: req.body.purchased,
-        owner_image: req.files['owner_image'][0].path,
-        adhar_image: req.files['adhar_image'][0].path,
-        rc_image: req.files['rc_image'][0].path,
-        back_image: req.files['back_image'][0].path,
-        side_image: req.files['side_image'][0].path
-    };
-    
+router.post('/upload', async (req, res) => {
+    // Upload the image
+    try {
+        const owner_image_result = await cloudinary.uploader.upload(req.body.owner_image, {
+            folder: 'relynrelax',
+            quality: 60,
+            width: 500,
+            height: 500
+        })
+        const adhar_image_result = await cloudinary.uploader.upload(req.body.adhar_image, {
+            folder: 'relynrelax',
+            quality: 60,
+            width: 500,
+            height: 500
+        })
+        const rc_image_result = await cloudinary.uploader.upload(req.body.rc_image, {
+            folder: 'relynrelax',
+            quality: 60,
+            width: 500,
+            height: 500
+        })
+        const side_image_result = await cloudinary.uploader.upload(req.body.side_image, {
+            folder: 'relynrelax',
+            quality: 60,
+            width: 500,
+            height: 500
+        })
 
-        if (!req.files ||
-            !req.files['owner_image'] ||
-            !req.files['adhar_image'] ||
-            !req.files['rc_image'] ||
-            !req.files['back_image'] ||
-            !req.files['side_image']
-        ) {
-        return res.status(400).json({ error: 'Please provide both owner_image and image files.' });
-    }
+        const sellrequest = {
+            user: req.body.user,
+            reg_no: req.body.reg_no,
+            phone_no: req.body.phone_no,
+            price: req.body.price,
+            brand: req.body.brand,
+            type: req.body.type,
+            specification: req.body.specification,
+            km_ran: req.body.km_ran,
+            age: req.body.age,
+            purchased: req.body.purchased,
+            owner_image: {
+                public_id: owner_image_result.public_id,
+                url: owner_image_result.secure_url
+            },
+            adhar_image: {
+                public_id: adhar_image_result.public_id,
+                url: adhar_image_result.secure_url
+            },
+            rc_image: {
+                public_id: rc_image_result.public_id,
+                url: rc_image_result.secure_url
+            },
+            side_image: {
+                public_id: side_image_result.public_id,
+                url: side_image_result.secure_url
+            },
+        };
 
-    // File upload successful
-    // return res.status(200).json({ message: 'Image uploaded successfully.' });
+
     try {
         await SellRequest.create(sellrequest);
         res.json({ success: true });
     }
     catch (err) {
+        console.error(err);
         res.json({ success: false });
     }
+    } catch (err) {
+        console.error(err);
+        res.json({ success: false });
+    }
+    
 
     });
 

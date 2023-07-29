@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const mongoURI = "mongodb+srv://relynrelax:RelyNRelax@cluster0.z4idhzt.mongodb.net/relynrelax?retryWrites=true&w=majority";
+const dotenv = require('dotenv');
+dotenv.config();
+const mongoURI = process.env.MONGODB_URI;
 
 
 const mongoDB = async () => {
