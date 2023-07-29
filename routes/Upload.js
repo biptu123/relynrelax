@@ -1,15 +1,13 @@
 const express = require('express');
 const multer = require('multer');
-const SellRequest = require('../models/SellRequest');
-
-const app = express();
+const path = require('path');
 const router = express.Router();
+
+const SellRequest = require('../models/SellRequest');
 
 // Set up Multer storage configuration
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'https://github.com/biptu123/relynrelax/upload/');
-    },
+    destination: path.join(__dirname, './upload'),
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname);
     },
@@ -17,7 +15,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Upload endpoint using Express Router
+// Upload endpoint 
 router.post('/upload',
     upload.fields([
         { name: 'owner_image' },
