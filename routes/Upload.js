@@ -1,13 +1,14 @@
 const express = require('express');
 const multer = require('multer');
-const path = require('path');
-const router = express.Router();
-
 const SellRequest = require('../models/SellRequest');
+const path = require('path');
+
+const app = express();
+const router = express.Router();
 
 // Set up Multer storage configuration
 const storage = multer.diskStorage({
-    destination: path.join(__dirname, './upload'),
+    destination: path.join(__dirname, './uploads'),
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname);
     },
@@ -15,7 +16,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Upload endpoint 
+// Upload endpoint using Express Router
 router.post('/upload',
     upload.fields([
         { name: 'owner_image' },
@@ -65,6 +66,7 @@ router.post('/upload',
         res.json({ success: false });
     }
 
-});
+    });
+
 
 module.exports = router;
