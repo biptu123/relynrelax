@@ -25,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', require('./routes/Auth'));
 app.use('/api', require('./routes/Reminder'));
 app.use('/api', require('./routes/User'));
+app.use('/api', require('./routes/Upload'));
 
 
 // static files
