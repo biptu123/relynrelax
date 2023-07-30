@@ -15,8 +15,13 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    email: {
-        type: String
+    otp: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        default: 'not verified'
     }
 });
 
