@@ -43,6 +43,20 @@ router.post('/updateuser',
             res.json({ success: false});
         }
     })
+router.delete('/deleteuser/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const deletedUser = await User.findByIdAndDelete(userId);
 
+        if (!deletedUser) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        res.json({ success: true, message: 'User deleted successfully', user: deletedUser });
+    } catch (error) {
+        console.error('Error deleting User:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
 
 module.exports = router;
