@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const Reminder = require('../models/Reminder');
+const SellRequest = require('../models/SellRequest');
 
 
 router.get('/users', async (req, res) => {
@@ -37,6 +39,7 @@ router.post('/updateuser',
                 phone_no: req.body.phone_no,
                 email: req.body.email
             });
+            
             res.json({ success: true, user });
         }
         catch (err) {
@@ -51,8 +54,13 @@ router.delete('/deleteuser/:id', async (req, res) => {
         if (!deletedUser) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
-
-        res.json({ success: true, message: 'User deleted successfully', user: deletedUser });
+        
+        await Reminder.deleteMany({ user: deletedUser._id });
+        const reminders = await Reminder.find({});
+        await SellRequest.deleteMany({ user: deletedUser._id });
+        const sellrequests = await SellRequest.find({});
+        
+        res.json({ success: true, message: 'User deleted successfully', user: deletedUser , reminders, sellrequests });
     } catch (error) {
         console.error('Error deleting User:', error);
         res.status(500).json({ success: false, message: 'Internal server error' });
