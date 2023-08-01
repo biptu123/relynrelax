@@ -20,6 +20,7 @@ app.use('/api', require('./routes/Reminder'));
 app.use('/api', require('./routes/User'));
 app.use('/api', require('./routes/Upload'));
 app.use('/api', require('./routes/SellRequests'));
+app.use('/api/buyrequest', require('./routes/BuyRequest'));
 
 
 
