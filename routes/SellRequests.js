@@ -4,8 +4,24 @@ const router = express.Router();
 
 
 router.get('/sellrequests', async (req, res) => {
+    const user = req.query.user;
     try {
-        const sellrequests = await SellRequest.find({});
+        let sellrequests;
+
+        if (user)  sellrequests = await SellRequest.find({user: user}) 
+        else sellrequests = await SellRequest.find({});
+
+
+        res.json({ success: true, sellrequests: sellrequests });
+    } catch (error) {
+        console.error('Error fetching sellrequests:', error);
+        res.status(400).json({ success: false, message: 'Internal server error' });
+    }
+})
+router.get('/sellrequest/:id', async (req, res) => {
+    const _id = req.params.id;
+    try {
+        const sellrequests = await SellRequest.find({_id});
         res.json({ success: true, sellrequests: sellrequests });
     } catch (error) {
         console.error('Error fetching sellrequests:', error);
