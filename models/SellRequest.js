@@ -44,6 +44,13 @@ const SellRequestSchema = new Schema({
         type: String,
         required: true
     },
+    address: {
+        coords: {
+            latitude: String,
+            longitude: String
+        },
+        data: mongoose.Schema.Types.Mixed
+    },
     owner_image: {
         public_id: {
             type: String,

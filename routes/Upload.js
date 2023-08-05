@@ -44,6 +44,7 @@ router.post('/upload', async (req, res) => {
             km_ran: req.body.km_ran,
             age: req.body.age,
             purchased: req.body.purchased,
+            address: req.body.address,
             owner_image: {
                 public_id: owner_image_result.public_id,
                 url: owner_image_result.secure_url
@@ -63,21 +64,21 @@ router.post('/upload', async (req, res) => {
         };
 
 
-    try {
-        await SellRequest.create(sellrequest);
-        res.json({ success: true });
-    }
-    catch (err) {
-        console.error(err);
-        res.json({ success: false });
-    }
+        try {
+            await SellRequest.create(sellrequest);
+            res.json({ success: true });
+        }
+        catch (err) {
+            console.error(err);
+            res.json({ success: false });
+        }
     } catch (err) {
         console.error(err);
         res.json({ success: false });
     }
-    
 
-    });
+
+});
 
 
 module.exports = router;
